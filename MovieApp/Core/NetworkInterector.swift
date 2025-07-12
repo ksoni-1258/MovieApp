@@ -20,7 +20,7 @@ nonisolated class NetworkInteractor {
         return nil
     }
 
-    private static func fetchData(_ endpoint: EndpointType) async throws -> Data? {
+    static func fetchData(_ endpoint: EndpointType) async throws -> Data? {
         do {
             return try await ApiRouter.performRequest(endpoint)
         } catch let error as RequestError {
@@ -59,13 +59,16 @@ nonisolated fileprivate class ApiRouter {
             guard var url = URL(string: route.baseURL.rawValue + "/" + route.path) else {
                 throw NSError(domain: "URL generation error", code: 0)
             }
-            if let queryParams = route.paramsAndHeader.queryItems {
+            if let queryParams = route.paramsBodyHeader.params {
                 url.append(queryItems: queryParams)
             }
             var urlRequest = URLRequest(url: url)
             urlRequest.httpMethod = route.httpMethod.rawValue
+            if let bodyDict = route.paramsBodyHeader.bodyDict {
+                urlRequest.httpBody = try JSONSerialization.data(withJSONObject: bodyDict, options: [])
+            }
             urlRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
-            urlRequest.allHTTPHeaderFields = route.paramsAndHeader.headers
+            urlRequest.allHTTPHeaderFields = route.paramsBodyHeader.headers
             return urlRequest
         } catch {
             throw error

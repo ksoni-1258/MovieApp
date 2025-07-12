@@ -17,6 +17,8 @@ struct SearchRouter {
             ],
             viewTitle: "Search") { movie in
                 SearchMovieRow(movie: movie)
+            } detailView: { movie in
+                MovieDetailRouter.createModule(movie: movie)
             }
     }
 }

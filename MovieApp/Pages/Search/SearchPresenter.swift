@@ -7,7 +7,7 @@
 
 import Foundation
 
-class SearchPresenter: InfiniteScrollableApiPresenter, SearchPresenterProtocol {
+class SearchPresenter: InfiniteScrollableApiPresenter {
     var interactor: MovieInteractorProtocol
 
     private var searchWorkItem: DispatchWorkItem?
@@ -35,7 +35,7 @@ class SearchPresenter: InfiniteScrollableApiPresenter, SearchPresenterProtocol {
         }
     }
 }
-extension SearchPresenter {
+extension SearchPresenter: SearchInfiniteScrollablePresenterProtocol {
     func onSearchTextChanged(_ text: String) {
         searchWorkItem?.cancel()
         searchText = text
@@ -55,4 +55,13 @@ extension SearchPresenter {
         self.searchWorkItem = workItem
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: workItem)
     }
+}
+@MainActor
+protocol SearchPresenterProtocol: ObservableObject {
+    associatedtype Item: Identifiable
+
+    var data: [Item] { get set }
+    var searchText: String {get set}
+
+    func onSearchTextChanged(_ searchText: String)
 }

@@ -11,12 +11,3 @@ import Foundation
 protocol SearchInfiniteScrollablePresenterProtocol: InfiniteScrollablePresenterProtocol, SearchPresenterProtocol {
 }
 
-@MainActor
-protocol SearchPresenterProtocol: ObservableObject {
-    associatedtype Item: Identifiable
-
-    var data: [Item] { get set }
-    var searchText: String {get set}
-
-    func onSearchTextChanged(_ searchText: String)
-}

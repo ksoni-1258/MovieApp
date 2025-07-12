@@ -16,8 +16,11 @@ struct PopularRouter {
                 GridItem(.flexible()),
                 GridItem(.flexible())
             ],
-            viewTitle: "Popular") { movie in
+            viewTitle: "Popular",
+            content: { movie in
                 PopularCardView(movie: movie)
+            }) { movie in
+                MovieDetailRouter.createModule(movie: movie)
             }
     }
 }

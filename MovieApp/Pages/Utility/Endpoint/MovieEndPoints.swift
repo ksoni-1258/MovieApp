@@ -33,21 +33,26 @@ extension MovieEndPoints: EndpointType {
         .get
     }
 
-    var paramsAndHeader: ParameterList {
+    var paramsBodyHeader: ParamBodyHeaderList {
         let authKey: String = (try? AuthManager.getSessionToken()) ?? ""
         switch self {
         case .popular, .nowPlaying:
-            return ParameterList(
-                queryItems: nil,
+            return (
+                params: nil,
+                bodyDict: nil,
                 headers: [
                     "Authorization" : authKey
                 ]
             )
 
         case .search(let queryItems, _):
-            return ParameterList(queryItems: queryItems, headers: [
-                "Authorization" : authKey
-            ])
+            return (
+                params: queryItems,
+                bodyDict: nil,
+                headers: [
+                    "Authorization" : authKey
+                ]
+            )
         }
     }
 }

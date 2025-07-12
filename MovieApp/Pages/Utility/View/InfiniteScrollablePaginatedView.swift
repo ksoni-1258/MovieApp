@@ -9,22 +9,31 @@ import SwiftUI
 
 struct InfiniteScrollablePaginatedView<
     P: InfiniteScrollablePresenterProtocol,
-    V: View
+    V: View,
+    D: View
 >: View {
     @StateObject var presenter: P
+    @State private var selectedItem: P.Item?
+
     let columns: [GridItem]
     let viewTitle: String
     let content: (P.Item) -> V
+    let detailView: (P.Item) -> D
 
     var body: some View {
         NavigationSplitView {
             ScrollView {
                 LazyVGrid(columns: columns, spacing: 8) {
                     ForEach(presenter.data) { item in
-                        content(item)
-                            .onAppear {
-                                presenter.loadNextPageIfNeeded(currentItem: item)
-                            }
+                        Button {
+                            selectedItem = item
+                        } label: {
+                            content(item)
+                        }
+                        .buttonStyle(.plain)
+                        .onAppear {
+                            presenter.loadNextPageIfNeeded(currentItem: item)
+                        }
                     }
                 }
                 .padding()
@@ -38,6 +47,9 @@ struct InfiniteScrollablePaginatedView<
                 }
             }
             .navigationTitle(viewTitle)
+            .sheet(item: $selectedItem) { item in
+                detailView(item)
+            }
         } detail: {
             Text("Select a Movie")
                 .font(.largeTitle)

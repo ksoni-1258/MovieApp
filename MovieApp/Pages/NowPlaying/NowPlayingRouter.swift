@@ -17,8 +17,12 @@ struct NowPlayingRouter {
             columns: [
                 GridItem(.flexible())
             ],
-            viewTitle: "Now Playing") { movie in
+            viewTitle: "Now Playing",
+            content: { movie in
                 NowPlayingCardView(movie: movie)
+            }, detailView: {movie in
+                MovieDetailRouter.createModule(movie: movie)
             }
+        )
     }
 }
