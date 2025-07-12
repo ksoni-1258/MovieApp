@@ -85,15 +85,3 @@ struct SearchMovieRow: View {
         }
     }
 }
-@MainActor
-protocol SearchInfiniteScrollablePresenterProtocol: ObservableObject {
-    associatedtype Item: Identifiable
-
-    var data: [Item] { get }
-    var isLoading: Bool { get }
-    var searchText: String {get set}
-
-    func loadInitialPage() async
-    func loadNextPageIfNeeded(currentItem: Item)
-    func onSearchTextChanged(_ searchText: String)
-}
