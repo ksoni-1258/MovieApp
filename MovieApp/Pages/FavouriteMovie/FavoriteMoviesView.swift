@@ -36,7 +36,35 @@ struct FavoriteMoviesView: View {
                     }
                 })
             }
+            .refreshable(action: {
+                Task {
+                    await syncFavorites()
+                }
+            })
             .navigationTitle("Favorites")
+            .task {
+                await syncFavorites()
+            }
+        }
+    }
+
+    @MainActor
+    private func syncFavorites() async {
+        do {
+            let updatedMovies = try await presenter.syncBookmarkMovieList()
+            await MainActor.run {
+                // Remove existing ones
+                for movie in favMovieList {
+                    modelContext.delete(movie)
+                }
+
+                // Add new fetched movies
+                for movie in updatedMovies {
+                    modelContext.insert(movie)
+                }
+            }
+        } catch {
+            debugPrint(error)
         }
     }
 }

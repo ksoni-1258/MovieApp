@@ -9,7 +9,7 @@
 enum BookmarkEndPoints {
     case addBookmark(Int)
     case removeBookmark(Int)
-//    case getBookmarkList(QueryList, Int)
+    case getBookmarkList
 }
 extension BookmarkEndPoints: EndpointType {
     var baseURL: BaseUrl {
@@ -20,6 +20,9 @@ extension BookmarkEndPoints: EndpointType {
         switch self {
         case .addBookmark, .removeBookmark:
             "account/22087278/favorite"
+
+        case .getBookmarkList:
+            "account/22087278/favorite/movies"
         }
     }
 
@@ -27,6 +30,9 @@ extension BookmarkEndPoints: EndpointType {
         switch self {
         case .addBookmark, .removeBookmark:
             return .post
+
+        case .getBookmarkList:
+            return .get
         }
     }
 
@@ -44,6 +50,13 @@ extension BookmarkEndPoints: EndpointType {
         case .removeBookmark(let id):
             bodyDict["media_id"] = id
             bodyDict["favorite"] = false
+
+        case .getBookmarkList:
+            return (
+                params: nil,
+                bodyDict: nil,
+                headers: ["Authorization" : authKey]
+            )
         }
 
         return (

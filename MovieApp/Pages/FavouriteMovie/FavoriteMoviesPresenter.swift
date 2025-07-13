@@ -9,7 +9,7 @@ import Foundation
 protocol FavoriteMoviesPresenterProtocol: ObservableObject {
     var movies: [Movie] { get }
     func removeBookmarkMovie(_ id: Int) async
-    func syncBookmarkMovieList() async throws -> [Movie]
+    func syncBookmarkMovieList() async throws -> [FavoriteMovie]
 }
 
 @MainActor
@@ -25,7 +25,8 @@ class FavoriteMoviesPresenter: FavoriteMoviesPresenterProtocol {
         try? await interactor.removeBookmarkMovie(id)
     }
 
-    func syncBookmarkMovieList() async throws -> [Movie] {
-        []
+    func syncBookmarkMovieList() async throws -> [FavoriteMovie] {
+        let movies = try await interactor.syncBookmarkMovieList()
+        return movies.compactMap({FavoriteMovie($0)})
     }
 }

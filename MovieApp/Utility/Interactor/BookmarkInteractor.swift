@@ -15,7 +15,12 @@ class BookmarkInteractor: BookmarkInteractorProtocol, MovieDetailBookmarkInterac
     }
 
     func syncBookmarkMovieList() async throws -> [Movie] {
-        []
+        do {
+            let paginatedMovies = try await NetworkInteractor.fetchForModel(BookmarkEndPoints.getBookmarkList, type: PaginatedResult<Movie>.self)
+            return paginatedMovies?.results ?? []
+        } catch {
+            return []
+        }
     }
 }
 protocol BookmarkInteractorProtocol {
