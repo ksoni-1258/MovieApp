@@ -15,24 +15,12 @@ struct MovieDetailView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
-                if let posterPath = movie.posterPath,
-                   let url = URL(string: "https://image.tmdb.org/t/p/w500\(posterPath)") {
-                    AsyncImage(url: url) { phase in
-                        switch phase {
-                        case .success(let image):
-                            image
-                                .resizable()
-                                .scaledToFit()
-                                .frame(maxWidth: .infinity)
-                                .cornerRadius(12)
-                        case .failure(_):
-                            Color.gray.frame(height: 250)
-                        case .empty:
-                            ProgressView().frame(height: 250)
-                        @unknown default:
-                            EmptyView()
-                        }
-                    }
+                if let posterPath = movie.posterPath {
+                    let fullUrl = "https://image.tmdb.org/t/p/w500\(posterPath)"
+                    CachedAsyncImageView(imageUrl: fullUrl)
+                        .frame(maxWidth: .infinity)
+                        .cornerRadius(12)
+
                 }
 
                 Text(movie.title)
