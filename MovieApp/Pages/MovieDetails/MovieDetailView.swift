@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct MovieDetailView: View {
+    @Environment(\.modelContext) private var modelContext
+
     @State var movie: Movie
     @State var isBookmarked: Bool = false
     var presenter: MovieDetailPresenterProtocol
@@ -51,6 +53,7 @@ struct MovieDetailView: View {
                         isBookmarked.toggle()
                         Task{
                             await presenter.bookmarkMovie(movie.id)
+                            modelContext.insert(FavoriteMovie(movie))
                         }
                     }) {
                         AFButton(title: "Bookmark")

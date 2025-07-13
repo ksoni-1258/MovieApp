@@ -21,7 +21,3 @@ class MovieDetailPresenter: MovieDetailPresenterProtocol {
 protocol MovieDetailPresenterProtocol {
     func bookmarkMovie(_ id: Int) async
 }
-
-protocol MovieDetailBookmarkInteractorProtocol {
-    func addBookmarkMovie(_ id: Int) async throws
-}

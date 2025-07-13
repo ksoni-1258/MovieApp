@@ -12,12 +12,12 @@ struct SearchMovieRow: View {
     var body: some View {
         HStack {
             CachedAsyncImageView(imageUrl: "https://image.tmdb.org/t/p/w500\(movie.posterPath ?? "")")
-                .clipped()
                 .frame(width: 70, height: 70)
                 .cornerRadius(8)
+                .clipped()
 
             Text(movie.title)
-                .lineLimit(1)
+                .lineLimit(2)
 
             Spacer()
         }

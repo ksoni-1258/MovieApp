@@ -41,4 +41,14 @@ struct Movie: Codable, Identifiable {
         self.voteAverage = voteAverage
         self.releaseDate = releaseDate
     }
+
+    init(_ favoriteMovie: FavoriteMovie) {
+        self.id = favoriteMovie.id
+        self.title = favoriteMovie.title
+        self.overview = favoriteMovie.overview
+        self.posterPath = favoriteMovie.posterPath
+        self.backdropPath = favoriteMovie.backdropPath
+        self.voteAverage = favoriteMovie.voteAverage
+        self.releaseDate = favoriteMovie.releaseDate
+    }
 }
